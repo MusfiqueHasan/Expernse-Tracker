@@ -61,7 +61,6 @@ const SearchSortAddComponent = ({ search, handleSearch }) => {
                                 anchor={anchor}
                                 state={state}
                             />
-
                         </React.Fragment>
                     ))}
                     <SwapVertIcon
