@@ -6,7 +6,7 @@ import AllSections from './components/all-sections.component';
 
 const Tracker = () => {
     return (
-        <Paper elevation={3} sx={{ m: 4, pb:1 }}>
+        <Paper elevation={3} sx={{ m: { xs: 1, md: 4 }, pb: 1 }}>
             <Box
                 sx={{
                     width: '100%',
@@ -24,10 +24,14 @@ const Tracker = () => {
                     borderRadius: 1
                 }}
             >
+               
                 <Typography
                     sx={{
                         color: 'white',
-                        fontSize: 40,
+                        fontSize: {
+                            xs: 16,
+                            md: 40
+                        },
                         fontWeight: 'bold',
                         textTransform: 'uppercase',
                         fontFamily: 'cursive'

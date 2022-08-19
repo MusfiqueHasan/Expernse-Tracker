@@ -1,4 +1,4 @@
-import { CREATE_TRACKER_INF0, DELETE_TRACKER_INF0, GET_SINGLE_TRACKER_INFO, GET_TRACKER_INF0, SORTED_DATA, UPDATE_MODAL_STATE, UPDATE_TRACKER_INF0, UPDATE_TRACKER_STATE } from "../type";
+import { CREATE_TRACKER_INF0, DELETE_TRACKER_INF0, GET_SINGLE_TRACKER_INFO, GET_TRACKER_INF0, SEARCHED_DATA, SORTED_DATA, UPDATE_MODAL_STATE, UPDATE_TRACKER_INF0, UPDATE_TRACKER_STATE, RANGED_DATA, TYPED_DATA, CATEGORY_DATA } from "../type";
 import { nanoid } from 'nanoid'
 export const getTrackerDetails = () => async (dispatch) => {
     try {
@@ -87,6 +87,66 @@ export const getSortedData = () => async (dispatch) => {
     try {
         dispatch({ type: SORTED_DATA })
         dispatch(getTrackerDetails())
+    } catch (error) {
+        console.log(error)
+    }
+}
+export const getSearchedData = (searchedData) => async (dispatch) => {
+    try {
+        const newData = JSON.parse(localStorage.getItem("trackerDetails") || "[]")
+        const newSearchedData = newData?.filter(elm => elm.description.toLowerCase().startsWith(searchedData.toLowerCase()))
+        dispatch({ type: SEARCHED_DATA, payload: newSearchedData })
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const getRangeData = (rangeData) => async (dispatch) => {
+    try {
+        const newData = JSON.parse(localStorage.getItem("trackerDetails") || "[]")
+        const newRangeData = newData?.filter(elm => {
+            if (rangeData.min === '' || rangeData.min === null || rangeData.min === undefined) {
+                return elm
+            }
+            if (rangeData.max === '' || rangeData.max === null || rangeData.max === undefined) {
+                return elm
+            }
+            if (rangeData.min <= rangeData.max) {
+                return elm.amount <= rangeData.max && elm.amount >= rangeData.min
+            } else if (rangeData.min > rangeData.max) {
+                return elm.amount >= rangeData.min
+            } else {
+                return elm.amount <= rangeData.max
+            }
+        })
+        dispatch({ type: RANGED_DATA, payload: newRangeData })
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+export const getTypedData = (typedData) => async (dispatch) => {
+    try {
+        const newData = JSON.parse(localStorage.getItem("trackerDetails") || "[]")
+        if (typedData.length)
+            dispatch({ type: TYPED_DATA, payload: newData?.filter(elm => typedData.includes(elm.type)) })
+        else dispatch({ type: TYPED_DATA, payload: newData })
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const getCategoryData = (catData) => async (dispatch) => {
+    try {
+        const newData = JSON.parse(localStorage.getItem("trackerDetails") || "[]")
+        if (catData.length)
+            dispatch({ type: CATEGORY_DATA, payload: newData?.filter(elm => catData.includes(elm.category)) })
+        else dispatch({ type: CATEGORY_DATA, payload: newData })
+
     } catch (error) {
         console.log(error)
     }

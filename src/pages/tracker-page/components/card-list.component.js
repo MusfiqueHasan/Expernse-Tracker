@@ -6,12 +6,19 @@ import { getTrackerDetails } from '../../../redux/actions/tracker.action';
 
 const CardList = ({ limit, page, total }) => {
     const dispatch = useDispatch()
-    const { details } = useSelector((state) => state.trackerInfo)
-    console.log(details);
+    const { details, sortType } = useSelector((state) => state.trackerInfo)
+
+
+    if (sortType === 'asc') {
+        details.sort((a, b) => a.amount - b.amount)
+    } else if (sortType === 'desc') {
+        details.sort((a, b) => b.amount - a.amount)
+    }
 
     useEffect(() => {
         dispatch(getTrackerDetails())
     }, [dispatch])
+
     return (
         <Box sx={{
             height: '68vh',
