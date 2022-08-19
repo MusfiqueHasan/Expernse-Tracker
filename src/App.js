@@ -1,11 +1,13 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { Provider } from 'react-redux';
+import Tracker from './pages/tracker-page/tracker';
+import store from './redux/store';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <p>Personal Expense Tracker</p>
-    </div>
+    <Provider store={store}>
+      <Tracker />
+    </Provider>
   );
 }
 
