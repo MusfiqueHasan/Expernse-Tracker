@@ -53,6 +53,7 @@ const ModalComponent = () => {
                 dispatch(createTrackerDetails(trackerInfo))
             }
             dispatch(updateStateModal(false))
+            dispatch(updateTrackerState({}))
         }
 
     }

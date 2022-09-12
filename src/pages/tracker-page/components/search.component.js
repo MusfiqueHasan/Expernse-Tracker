@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {  useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { Box, TextField, Fab, Grid } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
@@ -6,21 +6,27 @@ import SwapVertIcon from '@mui/icons-material/SwapVert';
 import AddIcon from '@mui/icons-material/Add';
 import ModalComponent from '../../resources/components/modal.component';
 import SortIcon from '@mui/icons-material/Sort';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { getSortedData, updateStateModal } from '../../../redux/actions/tracker.action';
 import DrawerComponent from '../../resources/components/drawer.component';
 
 
 
-const SearchSortAddComponent = ({ search, handleSearch }) => {
+const SearchSortAddComponent = ({ search, handleSearch, setRefresh }) => {
     const dispatch = useDispatch()
-    const [state, setState] = React.useState({ left: false });
+    const [state, setState] = useState({ left: false });
+
 
     const { openModel } = useSelector(state => state.trackerInfo)
 
 
     const handleAddTrackerInfo = () => { dispatch(updateStateModal(true)) }
 
-    const handleSortedData = () => { dispatch(getSortedData()) }
+    const handleSortedData = () => {
+        localStorage.setItem('isFilter', true)
+        setRefresh(true)
+        dispatch(getSortedData())
+    }
 
     const toggleDrawer = (anchor, open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -28,6 +34,7 @@ const SearchSortAddComponent = ({ search, handleSearch }) => {
         }
         setState({ ...state, [anchor]: open });
     };
+
 
     return (
         <Grid container spacing={1}>
@@ -52,7 +59,7 @@ const SearchSortAddComponent = ({ search, handleSearch }) => {
                                 sx={{
                                     display: { xs: 'block', md: 'none' },
                                     cursor: 'pointer',
-                                    fontSize: 30
+                                    fontSize: 25
                                 }}
                                 onClick={toggleDrawer(anchor, true)}
                             />
@@ -66,10 +73,22 @@ const SearchSortAddComponent = ({ search, handleSearch }) => {
                     <SwapVertIcon
                         sx={{
                             ml: 3,
-                            fontSize: 30,
+                            fontSize: 25,
                             cursor: 'pointer'
                         }}
                         onClick={handleSortedData}
+                    />
+                    <RefreshIcon
+                        sx={{
+                            ml: 3,
+                            fontSize: 25,
+                            cursor: 'pointer'
+                        }}
+                        onClick={() => {
+                            setRefresh(false)
+                            localStorage.setItem('isFilter', false)
+                            localStorage.removeItem('filteredData')
+                        }}
                     />
                     <Fab size="small" color="primary" aria-label="add">
                         <AddIcon onClick={handleAddTrackerInfo} />

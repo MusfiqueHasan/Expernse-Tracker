@@ -9,15 +9,15 @@ const TotalIncomeAndExpense = () => {
 
     return (
         <Paper sx={{
-            width: "74%",
-            height: '50%',
+            width: "50%",
+            height: '43%',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             bgcolor: 'white',
             position: 'absolute',
-            bottom: -60,
-            borderRadius: 5,
+            bottom: -30,
+            borderRadius: 2,
             px: 5
         }}>
             <Grid container spacing={2}>
@@ -30,14 +30,14 @@ const TotalIncomeAndExpense = () => {
                             fontWeight: 'bold',
                             fontSize: {
                                 xs: 12,
-                                md: 20
+                                md: 15
                             },
-                            py: { md: 3 },
+                            py: { md: 1 },
                             mr: 2,
                         }}
                         label={<span
                             style={{ display: 'flex', alignItems: 'center' }}>
-                            <MonetizationOnIcon />
+                            <MonetizationOnIcon sx={{ fontSize: 18 }} />
                             Income: ট{details.filter(val => val.type === "Income").reduce((previousValue, currentValue) => (previousValue + parseFloat(currentValue.amount)), 0)}
                         </span>
                         }
@@ -50,15 +50,15 @@ const TotalIncomeAndExpense = () => {
                             bgcolor: '#ffebee',
                             color: '#b71c1c',
                             fontWeight: 'bold',
-                            py: { md: 3 },
                             fontSize: {
                                 xs: 12,
-                                md: 20
-                            }
+                                md: 15
+                            },
+                            py: { md: 1 },
                         }}
                         label={<span
                             style={{ display: 'flex', alignItems: 'center' }}>
-                            <MonetizationOnIcon />
+                            <MonetizationOnIcon sx={{ fontSize: 18 }} />
                             Expense: ট{details.filter(val => val.type === 'Expense').reduce((previousValue, currentValue) => (previousValue + parseFloat(currentValue.amount)), 0)}
                         </span>
                         }

@@ -4,7 +4,7 @@ import { Box, TextField, Checkbox, Typography, FormControlLabel, FormGroup } fro
 import { getRangeData, getTypedData, getCategoryData } from '../../../redux/actions/tracker.action';
 
 
-const Filter = () => {
+const Filter = ({ setRefresh }) => {
     const dispatch = useDispatch()
     const [minMax, setMinMax] = useState({ min: 0.0, max: 0.0 })
     const [type, setType] = useState([])
@@ -25,20 +25,22 @@ const Filter = () => {
     }, [dispatch, minMax])
 
     return (
-        <Box sx={{ p: { xs: 3, md: 1.5 } }}>
+        <Box sx={{ pl: { xs: 2, md: 0 }, pt: { xs: 4, md: 0 } }}>
             <Typography
                 sx={{
                     fontWeight: 'bold',
-                    fontSize: 25,
+                    fontSize: 20,
                 }}
             >Filter</Typography>
-            <Box sx={{ mt: 2, }}>
+            <Box sx={{ mt: 1.5 }}>
                 <Typography sx={{ fontWeight: 'bold' }}>Range:</Typography>
-                <Box sx={{ p: 1, my: 0.5 }}>
+                <Box >
 
                     <TextField
                         value={minMax.min === 0.0 ? '' : minMax.min}
                         onChange={(e) => {
+                            setRefresh(true)
+                            localStorage.setItem('isFilter', true)
                             setMinMax({ ...minMax, min: e.target.value })
                         }}
                         label='Min'
@@ -50,6 +52,8 @@ const Filter = () => {
                     <TextField
                         value={minMax.max === 0.0 ? '' : minMax.max}
                         onChange={(e) => {
+                            setRefresh(true)
+                            localStorage.setItem('isFilter', true)
                             setMinMax({ ...minMax, max: e.target.value })
                         }}
                         sx={{ mt: 1 }}
@@ -61,14 +65,15 @@ const Filter = () => {
                     />
                 </Box>
             </Box>
-            <Box sx={{ mt: 1 }}>
+            <Box sx={{ mt: 1.5 }}>
                 <Typography sx={{ fontWeight: 'bold' }}>
                     Type:
                 </Typography>
-                <Box sx={{ p: 1, my: 0.5 }}>
+                <Box >
                     <FormGroup
                         onChange={(e) => {
                             setType(typ => {
+                                localStorage.setItem('isFilter', true)
                                 if (typ?.includes(e.target.value)) {
                                     return typ?.filter(item => item !== e.target.value)
 
@@ -80,24 +85,25 @@ const Filter = () => {
                     >
                         <FormControlLabel
                             value='Income'
-                            control={<Checkbox />}
+                            control={<Checkbox size='small' />}
                             label="Income"
                         />
 
                         <FormControlLabel
                             value='Expense'
-                            control={<Checkbox />}
+                            control={<Checkbox size='small' />}
                             label="Expense"
                         />
                     </FormGroup>
                 </Box>
             </Box>
-            <Box sx={{ mt: 1 }}>
+            <Box sx={{ mt: 1.5 }}>
                 <Typography sx={{ fontWeight: 'bold' }}>Category:</Typography>
-                <Box sx={{ p: 1, my: 0.5 }}>
+                <Box >
                     <FormGroup
                         onChange={(e) => {
                             setCategory(cat => {
+                                localStorage.setItem('isFilter', true)
                                 if (cat?.includes(e.target.value)) {
                                     return cat?.filter(item => item !== e.target.value)
 
@@ -109,35 +115,35 @@ const Filter = () => {
                     >
                         <FormControlLabel
                             value='food'
-                            control={<Checkbox />}
+                            control={<Checkbox size='small' />}
                             label="Food"
                         />
 
                         <FormControlLabel
                             value='travel'
-                            control={<Checkbox />}
+                            control={<Checkbox size='small' />}
                             label="Travel"
                         />
                         <FormControlLabel
                             value='salary'
-                            control={<Checkbox />}
+                            control={<Checkbox size='small' />}
                             label="Salary"
                         />
 
                         <FormControlLabel
                             value='utilities'
-                            control={<Checkbox />}
+                            control={<Checkbox size='small' />}
                             label="Utilities"
                         />
                         <FormControlLabel
                             value='medical'
-                            control={<Checkbox />}
+                            control={<Checkbox size='small' />}
                             label="Medical"
                         />
 
                         <FormControlLabel
                             value='personal'
-                            control={<Checkbox />}
+                            control={<Checkbox size='small' />}
                             label="Personal"
                         />
                     </FormGroup>

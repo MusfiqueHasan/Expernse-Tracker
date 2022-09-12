@@ -6,11 +6,11 @@ import AllSections from './components/all-sections.component';
 
 const Tracker = () => {
     return (
-        <Paper elevation={3} sx={{ m: { xs: 1, md: 4 }, pb: 1 }}>
+        <Box>
             <Box
                 sx={{
                     width: '100%',
-                    height: '30vh',
+                    height: '20vh',
                     backgroundImage: `linear-gradient(rgba(26, 58, 110, 0.5), rgba(26, 58, 110, 0.7)), 
                     url(${trackerBg})`,
                     backgroundPosition: 'center',
@@ -24,7 +24,7 @@ const Tracker = () => {
                     borderRadius: 1
                 }}
             >
-               
+
                 <Typography
                     sx={{
                         color: 'white',
@@ -42,7 +42,7 @@ const Tracker = () => {
                 <TotalIncomeAndExpense />
             </Box>
             <AllSections />
-        </Paper>
+        </Box>
     )
 }
 

@@ -1,5 +1,7 @@
-import { CREATE_TRACKER_INF0, DELETE_TRACKER_INF0, GET_SINGLE_TRACKER_INFO, GET_TRACKER_INF0, SEARCHED_DATA, SORTED_DATA, UPDATE_MODAL_STATE, UPDATE_TRACKER_INF0, UPDATE_TRACKER_STATE, RANGED_DATA, TYPED_DATA, CATEGORY_DATA } from "../type";
+import { CREATE_TRACKER_INF0, DELETE_TRACKER_INF0, GET_SINGLE_TRACKER_INFO, GET_TRACKER_INF0, SEARCHED_DATA, SORTED_DATA, UPDATE_MODAL_STATE, UPDATE_TRACKER_INF0, UPDATE_TRACKER_STATE, RANGED_DATA, TYPED_DATA, CATEGORY_DATA, } from "../type";
 import { nanoid } from 'nanoid'
+
+
 export const getTrackerDetails = () => async (dispatch) => {
     try {
         const allData = await JSON.parse(localStorage.getItem("trackerDetails") || "[]")
@@ -86,15 +88,16 @@ export const updateStateModal = (data) => async (dispatch) => {
 export const getSortedData = () => async (dispatch) => {
     try {
         dispatch({ type: SORTED_DATA })
-        dispatch(getTrackerDetails())
     } catch (error) {
         console.log(error)
     }
 }
+
 export const getSearchedData = (searchedData) => async (dispatch) => {
     try {
         const newData = JSON.parse(localStorage.getItem("trackerDetails") || "[]")
         const newSearchedData = newData?.filter(elm => elm.description.toLowerCase().startsWith(searchedData.toLowerCase()))
+        localStorage.setItem('filteredData', JSON.stringify(newSearchedData))
         dispatch({ type: SEARCHED_DATA, payload: newSearchedData })
 
     } catch (error) {
@@ -104,13 +107,19 @@ export const getSearchedData = (searchedData) => async (dispatch) => {
 
 export const getRangeData = (rangeData) => async (dispatch) => {
     try {
+
+        if (rangeData.min === 0 && rangeData.max === 0 && localStorage.getItem("isFilter")) {
+            const data = JSON.parse(localStorage.getItem("filteredData") || "[]")
+            if (data?.length) { return data }
+        }
+
         const newData = JSON.parse(localStorage.getItem("trackerDetails") || "[]")
         const newRangeData = newData?.filter(elm => {
             if (rangeData.min === '' || rangeData.min === null || rangeData.min === undefined) {
-                return elm
+                return true
             }
             if (rangeData.max === '' || rangeData.max === null || rangeData.max === undefined) {
-                return elm
+                return true
             }
             if (rangeData.min <= rangeData.max) {
                 return elm.amount <= rangeData.max && elm.amount >= rangeData.min
@@ -120,6 +129,8 @@ export const getRangeData = (rangeData) => async (dispatch) => {
                 return elm.amount <= rangeData.max
             }
         })
+        // console.log(newRangeData)
+        localStorage.setItem('filteredData', JSON.stringify(newRangeData))
         dispatch({ type: RANGED_DATA, payload: newRangeData })
 
     } catch (error) {
@@ -130,10 +141,16 @@ export const getRangeData = (rangeData) => async (dispatch) => {
 
 export const getTypedData = (typedData) => async (dispatch) => {
     try {
+
         const newData = JSON.parse(localStorage.getItem("trackerDetails") || "[]")
-        if (typedData.length)
-            dispatch({ type: TYPED_DATA, payload: newData?.filter(elm => typedData.includes(elm.type)) })
-        else dispatch({ type: TYPED_DATA, payload: newData })
+        if (typedData.length) {
+            const data = newData?.filter(elm => typedData.includes(elm.type))
+            localStorage.setItem('filteredData', JSON.stringify(data))
+            dispatch({ type: TYPED_DATA, payload: data })
+        }
+        else {
+            dispatch({ type: TYPED_DATA, payload: newData })
+        }
 
     } catch (error) {
         console.log(error)
@@ -143,9 +160,14 @@ export const getTypedData = (typedData) => async (dispatch) => {
 export const getCategoryData = (catData) => async (dispatch) => {
     try {
         const newData = JSON.parse(localStorage.getItem("trackerDetails") || "[]")
-        if (catData.length)
-            dispatch({ type: CATEGORY_DATA, payload: newData?.filter(elm => catData.includes(elm.category)) })
-        else dispatch({ type: CATEGORY_DATA, payload: newData })
+        if (catData.length) {
+            const data = newData?.filter(elm => catData.includes(elm.category))
+            localStorage.setItem('filteredData', JSON.stringify(data))
+            dispatch({ type: CATEGORY_DATA, payload: data })
+        }
+        else {
+            dispatch({ type: CATEGORY_DATA, payload: newData })
+        }
 
     } catch (error) {
         console.log(error)
